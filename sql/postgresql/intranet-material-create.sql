@@ -18,7 +18,10 @@
 
 create table im_materials (
 	material_id		integer
-				constraint im_material_pk primary key,
+				constraint im_material_pk 
+				primary key
+				constraint im_material_id_fk
+				references acs_objects,
 	material_name		varchar(2000),
 	material_nr		varchar(200),
 	material_type_id	integer not null
