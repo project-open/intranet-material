@@ -28,8 +28,6 @@ ad_proc -public im_material_type_translation { } { return 9014 }
 
 # reserved until 9099
 
-
-
 ad_proc -public im_package_material_id {} {
     Returns the package id of the intranet-material module
 } {
@@ -137,6 +135,9 @@ ad_proc -private im_material_options {
     if {0 != $restrict_to_uom_id} {
 	append where_clause "and material_uom_id = :restrict_to_uom_id\n"
     }
+
+    # Exclude inactive materials 
+    append where_clause "and material_status_id <> " [im_material_status_inactive]
 
     if {$show_material_codes_p} {
 	    set sql "
