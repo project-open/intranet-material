@@ -142,26 +142,37 @@ ad_proc -private im_material_options {
     # Exclude inactive materials
         append where_clause "and material_status_id <> " [im_material_status_inactive]
 
-    if {$show_material_codes_p} {
-	    set sql "
-		select	substring(material_nr for :max_option_len) as material_nr,
-			material_id
-		from	im_materials
-		where 	1=1
-			$where_clause
-		order by
-			material_nr
-	    "
-    } else {
+    switch {$show_material_codes_p} {
+	0 {
 	    set sql "
 		select	substring(material_name for :max_option_len) as material_name,
 			material_id
 		from	im_materials
 		where 	1=1
 			$where_clause
-		order by
-			material_name
+		order by material_name
 	    "
+	}
+	1 {
+	    set sql "
+		select	substring(material_nr for :max_option_len) as material_nr,
+			material_id
+		from	im_materials
+		where 	1=1
+			$where_clause
+		order by material_nr
+	    "
+	}
+	default {
+	    set sql "
+		select	substring(material_nr || ' - ' || material_name for :max_option_len) as material_nr,
+			material_id
+		from	im_materials
+		where 	1=1
+			$where_clause
+		order by material_nr
+	    "
+	}
     }
 
     set options [db_list_of_lists material_options $sql]
@@ -375,6 +386,10 @@ ad_proc -public im_material_list_component {
     set total_in_limited_sql "select count(*) from ($material_sql) f"
     set total_in_limited [db_string total_limited $total_in_limited_sql]
     set selection "select z.* from ($limited_query) z $order_by_clause_ext"
+
+#    ad_return_complaint 1 "<pre>$selection</pre>"
+
+
     
     # How many items remain unseen?
     set remaining_items [expr $total_in_limited - $start_idx - $max_entries_per_page]
