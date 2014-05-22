@@ -33,7 +33,7 @@ ad_proc -public im_material_type_translation { } { return 9014 }
 ad_proc -public im_package_material_id {} {
     Returns the package id of the intranet-material module
 } {
-    return [util_memoize "im_package_material_id_helper"]
+    return [util_memoize im_package_material_id_helper]
 }
 
 ad_proc -private im_package_material_id_helper {} {
@@ -44,7 +44,7 @@ ad_proc -private im_package_material_id_helper {} {
 }
 
 ad_proc -private im_material_default_material_id {} {
-    set material_id [util_memoize {db_string default_material "select material_id from im_materials where material_nr='default'" -default 0}]
+    set material_id [util_memoize [list db_string default_material "select material_id from im_materials where material_nr='default'" -default 0]]
     if {0 == $material_id} {
 	ad_return_complaint 1 "<b>[lang::message::lookup "" intranet-material.Bad_Config_title "Bad 'Material' Configuration"]</b>:
 		<br>[lang::message::lookup "" intranet-material.Bad_Config_msg "
@@ -66,7 +66,7 @@ ad_proc -private im_material_default_material_id {} {
 
 
 ad_proc -private im_material_default_translation_material_id {} {
-    set material_id [util_memoize {db_string default_material "select material_id from im_materials where material_nr='tr_task'" -default 0}]
+    set material_id [util_memoize [list db_string default_material "select material_id from im_materials where material_nr='tr_task'" -default 0]]
     if {0 == $material_id} {
         ad_return_complaint 1 "<b>[lang::message::lookup "" intranet-material.Bad_Config_title "Bad 'Material' Configuration"]</b>:
                 <br>[lang::message::lookup "" intranet-material.Bad_Config_msg "
