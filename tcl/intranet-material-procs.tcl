@@ -128,6 +128,7 @@ ad_proc -private im_material_options {
     {-show_material_codes_p 0}
     {-max_option_len 25 }
 } {
+
     set where_clause ""
     if {0 != $restrict_to_status_id} {
 	append where_clause "and material_status_id = :restrict_to_status_id\n"
@@ -142,7 +143,7 @@ ad_proc -private im_material_options {
     # Exclude inactive materials
         append where_clause "and material_status_id <> " [im_material_status_inactive]
 
-    switch {$show_material_codes_p} {
+    switch $show_material_codes_p {
 	0 {
 	    set sql "
 		select	substring(material_name for :max_option_len) as material_name,
