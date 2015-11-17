@@ -575,7 +575,7 @@ ad_proc -private im_material_create_from_parameters {
 	    db_transaction {
 		set material_id [db_string material_create "
 		select im_material__new (
-			[db_nextval acs_object_id_seq], 'im_material', now(), [ad_get_user_id], '[ns_conn peeraddr]', null,
+			[db_nextval acs_object_id_seq], 'im_material', now(), [ad_conn user_id], '[ns_conn peeraddr]', null,
 			:material_name, :material_nr, :material_type_id, [im_material_status_active],
 			:material_uom_id, 'Automatically generated'
 		)
