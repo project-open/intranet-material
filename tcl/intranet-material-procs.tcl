@@ -411,7 +411,7 @@ ad_proc -public im_material_list_component {
 		append table_body_html "
     		    <tr><td colspan=$colspan>&nbsp;</td></tr>
     		    <tr><td class=rowtitle colspan=$colspan>
-    		      <A href=index?[export_url_vars material_type_id project_id]>
+    		      <A href=index?[export_vars -url {material_type_id project_id}]>
     			$material_type
     		      </A>
     		    </td></tr>\n"
@@ -445,7 +445,7 @@ ad_proc -public im_material_list_component {
 	# This means that there are rows that we decided not to return
 	# Include a link to go to the next page
 	set next_start_idx [expr $end_idx + 1]
-	set next_page_url  "$current_page_url?[export_url_vars max_entries_per_page order_by]&start_idx=$next_start_idx&$pass_through_vars_html"
+	set next_page_url  "$current_page_url?[export_vars -url { max_entries_per_page order_by}]&start_idx=$next_start_idx&$pass_through_vars_html"
 	set next_page_html "($remaining_items more) <A href=\"$next_page_url\">&gt;&gt;</a>"
     } else {
 	set next_page_html ""

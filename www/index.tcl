@@ -98,7 +98,7 @@ set filter_html "
 # ---------------------------------------------------------------
 
 set admin_html "
-<li><a href=\"new?[export_url_vars return_url]\">Add a new Material</a>
+<li><a href=\"new?[export_vars -url {return_url}]\">Add a new Material</a>
 "
 
 
