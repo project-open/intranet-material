@@ -225,7 +225,7 @@ ad_proc -public im_material_list_component {
         set max_entries_per_page [im_parameter -package_id [im_package_core_id] NumberResultsPerPage "" 500]
     }
 
-    set end_idx [expr $start_idx + $max_entries_per_page - 1]
+    set end_idx [expr {$start_idx + $max_entries_per_page - 1}]
 
     if {![im_permission $user_id view_materials]} { return ""}
 
@@ -281,7 +281,7 @@ ad_proc -public im_material_list_component {
 	} else {
 	
 	    set value [ns_set get $form_vars $var]
-	    if {![string equal "" $value]} {
+	    if {$value ne ""} {
  		ns_set put $bind_vars $var $value
  		ns_log Notice "im_material_component: $var <- $value"
 	    }
@@ -296,7 +296,7 @@ ad_proc -public im_material_list_component {
     for {set i 0} {$i < $len} {incr i} {
 	set key [ns_set key $bind_vars $i]
 	set value [ns_set value $bind_vars $i]
-	if {![string equal $value ""]} {
+	if {$value ne "" } {
 	    lappend params "$key=[ns_urlencode $value]"
 	}
     }
@@ -305,7 +305,7 @@ ad_proc -public im_material_list_component {
     # ---------------------- Format Header ----------------------------------
 
     # Set up colspan to be the number of headers + 1 for the # column
-    set colspan [expr [llength $column_headers] + 1]
+    set colspan [expr {[llength $column_headers] + 1}]
 
     # Format the header names with links that modify the
     # sort order of the SQL query.
@@ -323,7 +323,7 @@ ad_proc -public im_material_list_component {
 	    set col_tr [lang::message::lookup "" intranet-material.[lang::util::suggest_key $cmd_eval] $cmd_eval]
 	}
 
-	if { [string compare $order_by $cmd_eval] == 0 } {
+	if { $order_by eq $cmd_eval  } {
 	    append table_header_html "  <td class=rowtitle>$col_tr</td>\n"
 	} else {
 	    append table_header_html "  <td class=rowtitle>
@@ -383,7 +383,7 @@ ad_proc -public im_material_list_component {
     # sort inside the table on the page for only those rows in the query 
     # results
     
-    set limited_query [im_select_row_range $material_sql $start_idx [expr $start_idx + $max_entries_per_page]]
+    set limited_query [im_select_row_range $material_sql $start_idx [expr {$start_idx + $max_entries_per_page}]]
     set total_in_limited_sql "select count(*) from ($material_sql) f"
     set total_in_limited [db_string total_limited $total_in_limited_sql]
     set selection "select z.* from ($limited_query) z $order_by_clause_ext"
@@ -393,7 +393,7 @@ ad_proc -public im_material_list_component {
 
     
     # How many items remain unseen?
-    set remaining_items [expr $total_in_limited - $start_idx - $max_entries_per_page]
+    set remaining_items [expr {$total_in_limited - $start_idx - $max_entries_per_page}]
     ns_log Notice "im_material_component: total_in_limited=$total_in_limited, remaining_items=$remaining_items"
     
     # ---------------------- Format the body -------------------------------
@@ -406,12 +406,12 @@ ad_proc -public im_material_list_component {
     db_foreach material_query_limited $selection {
 	
 	# insert intermediate headers for every material type
-	if {[string equal "Type" $order_by]} {
+	if {"Type" eq $order_by} {
 	    if {$old_material_type_id != $material_type_id} {
 		append table_body_html "
     		    <tr><td colspan=$colspan>&nbsp;</td></tr>
     		    <tr><td class=rowtitle colspan=$colspan>
-    		      <A href=index?[export_vars -url {material_type_id project_id}]>
+    		      <A href=[export_vars -base index {material_type_id project_id}]>
     			$material_type
     		      </A>
     		    </td></tr>\n"
@@ -419,7 +419,7 @@ ad_proc -public im_material_list_component {
 	    }
 	}
 	
-	append table_body_html "<tr$bgcolor([expr $ctr % 2])>\n"
+	append table_body_html "<tr$bgcolor([expr {$ctr % 2}])>\n"
 	foreach column_var $column_vars {
 	    append table_body_html "\t<td valign=top>"
 	    set cmd "append table_body_html $column_var"
@@ -434,18 +434,18 @@ ad_proc -public im_material_list_component {
 	}
     }
     # Show a reasonable message when there are no result rows:
-    if { [empty_string_p $table_body_html] } {
+    if { $table_body_html eq "" } {
 	set table_body_html "
 		<tr><td colspan=$colspan align=center><b>
 		[_ intranet-material.There_are_no_active_materials]
 		</b></td></tr>"
     }
     
-    if { $ctr == $max_entries_per_page && $end_idx < [expr $total_in_limited - 1] } {
+    if { $ctr == $max_entries_per_page && $end_idx < [expr {$total_in_limited - 1}] } {
 	# This means that there are rows that we decided not to return
 	# Include a link to go to the next page
-	set next_start_idx [expr $end_idx + 1]
-	set next_page_url  "$current_page_url?[export_vars -url { max_entries_per_page order_by}]&start_idx=$next_start_idx&$pass_through_vars_html"
+	set next_start_idx [expr {$end_idx + 1}]
+	set next_page_url  "[export_vars -base $current_page_url { max_entries_per_page order_by}]&start_idx=$next_start_idx&$pass_through_vars_html"
 	set next_page_html "($remaining_items more) <A href=\"$next_page_url\">&gt;&gt;</a>"
     } else {
 	set next_page_html ""
@@ -454,7 +454,7 @@ ad_proc -public im_material_list_component {
     if { $start_idx > 0 } {
 	# This means we didn't start with the first row - there is
 	# at least 1 previous row. add a previous page link
-	set previous_start_idx [expr $start_idx - $max_entries_per_page]
+	set previous_start_idx [expr {$start_idx - $max_entries_per_page}]
 	if { $previous_start_idx < 0 } { set previous_start_idx 0 }
 	set previous_page_html "<A href=$current_page_url?$pass_through_vars_html&order_by=$order_by&start_idx=$previous_start_idx>&lt;&lt;</a>"
     } else {

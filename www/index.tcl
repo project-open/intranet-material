@@ -27,7 +27,7 @@ ad_page_contract {
 # ---------------------------------------------------------------
 
 # User id already verified by filters
-set user_id [ad_maybe_redirect_for_registration]
+set user_id [auth::require_login]
 set current_user_id $user_id
 set page_title "[_ intranet-material.Material]"
 set context_bar [im_context_bar $page_title]
@@ -37,13 +37,13 @@ set user_admin_p [im_is_user_site_wide_or_intranet_admin $current_user_id]
 set return_url [im_url_with_query]
 set current_url [ns_conn url]
 
-if { [empty_string_p $how_many] || $how_many < 1 } {
+if { $how_many eq "" || $how_many < 1 } {
     set how_many [im_parameter -package_id [im_package_core_id] NumberResultsPerPage "" 50]
 } 
 
-set end_idx [expr $start_idx + $how_many - 1]
+set end_idx [expr {$start_idx + $how_many - 1}]
 
-if {[string equal $view_name "material_list_tasks"]} {
+if {$view_name eq "material_list_tasks"} {
     set view_name "material_list_material"
 }
 
@@ -98,7 +98,7 @@ set filter_html "
 # ---------------------------------------------------------------
 
 set admin_html "
-<li><a href=\"new?[export_vars -url {return_url}]\">Add a new Material</a>
+<li><a href=\"[export_vars -base new {return_url}]\">Add a new Material</a>
 "
 
 

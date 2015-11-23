@@ -26,7 +26,7 @@ set focus "material.var_name"
 set page_title "New Material"
 set context [im_context_bar $page_title]
 
-set user_id [ad_maybe_redirect_for_registration]
+set user_id [auth::require_login]
 if {![info exists material_id]} { set form_mode "edit" }
 
 if {"display" == $form_mode} {
