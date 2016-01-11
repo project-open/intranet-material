@@ -393,6 +393,6 @@ extra_select, extra_where, sort_order, visible_for) values (90010,900,NULL,
 -- Create one default material - so that the Material
 -- select box in TaskNewPage isnt empty
 select im_material__new (
-	 acs_object_id_seq.nextval::integer, 'im_material', now(), null, '0.0.0.0', null,
+	 nextval('t_acs_object_id_seq'), 'im_material', now(), null, '0.0.0.0', null,
 	'Default Material', 'default', 9000, 9100, 320, 'Default Material'
 );
