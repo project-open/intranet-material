@@ -5,6 +5,7 @@
   <msg key="Description">Description</msg>
   <msg key="Filter_Materials">Filter Materials</msg>
   <msg key="Material">Material</msg>
+  <msg key="Materials">Materials</msg>
   <msg key="Name">Name</msg>
   <msg key="Nr">Nr</msg>
   <msg key="Status">Status</msg>
