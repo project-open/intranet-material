@@ -57,8 +57,8 @@ if {"delete" == $button_pressed} {
 
 	ad_return_complaint 1 "<b>Error deleting Material</b>:<p>
 	This error is probably due to the fact there there are still 
-	'Timesheet Tasks' referencing this material:<p>
-	Timesheet Tasks:<br>
+	'Gantt Tasks' referencing this material:<p>
+	Gantt Tasks:<br>
 	<pre>[join $task_names "\n>"]</pre><p>
 	Timesheet Prices:<br>
 	<pre>[join $price_names "\n>"]</pre><p>
