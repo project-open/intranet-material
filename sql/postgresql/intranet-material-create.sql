@@ -309,15 +309,6 @@ SELECT im_category_new(9014, 'Translation', 'Intranet Material Type');
 
 
 
-create or replace view im_material_types as 
-select	category_id as material_type_id, 
-	category as material_type
-from	im_categories 
-where	category_type = 'Intranet Material Type' and
-	(enabled_p is null or enabled_p = 't');
-
-
-
 -------------------------------
 -- Intranet Material Status
 delete from im_categories where category_type = 'Intranet Material Status';
@@ -334,26 +325,38 @@ INSERT INTO im_categories VALUES (9102,'Inactive',
 create or replace view im_material_status as 
 select 	category_id as material_status_id, 
 	category as material_status
-from im_categories 
-where category_type = 'Intranet Material Status';
+from	im_categories 
+where	category_type = 'Intranet Material Status' and
+	(enabled_p is null or enabled_p = 't');
 	
+create or replace view im_material_types as 
+select	category_id as material_type_id, 
+	category as material_type
+from	im_categories 
+where	category_type = 'Intranet Material Type' and
+	(enabled_p is null or enabled_p = 't');
 
 create or replace view im_material_status_active as 
 select 	category_id as material_status_id, 
 	category as material_status
 from im_categories 
-where	category_type = 'Intranet Material Status'
-	and category_id not in (9102);
+where	category_type = 'Intranet Material Status' and
+	category_id not in (9102) and
+	(enabled_p is null or enabled_p = 't');
+
 
 
 --------------------------------------------------------------
 -- views to "material" items: 900-999
-insert into im_views (view_id, view_name, visible_for) values (900, 'material_list', 'view_materials');
-
+--
 
 -- MaterialList
 --
-delete from im_view_columns where column_id >= 90000 and column_id < 90099;
+delete from im_views where view_id = 900;
+delete from im_view_columns where view_id = 900;
+
+insert into im_views (view_id, view_name, visible_for) values (900, 'material_list', 'view_materials');
+
 
 insert into im_view_columns (column_id, view_id, group_id, column_name, column_render_tcl,
 extra_select, extra_where, sort_order, visible_for) values (90000,900,NULL,'Nr',
