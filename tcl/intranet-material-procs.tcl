@@ -137,10 +137,10 @@ ad_proc -private im_material_options {
 
     set where_clause ""
     if {"" ne $restrict_to_status_id && 0 ne $restrict_to_status_id} {
-	append where_clause "and material_status_id = :restrict_to_status_id\n"
+	append where_clause "and material_status_id in ([join [im_sub_categories $restrict_to_status_id] ","])\n"
     }
     if {"" ne $restrict_to_type_id && 0 ne $restrict_to_type_id} {
-	append where_clause "and material_type_id = :restrict_to_type_id\n"
+	append where_clause "and material_type_id in ([join [im_sub_categories $restrict_to_type_id] ","])\n"
     }
     if {"" ne $restrict_to_uom_id && 0 ne $restrict_to_uom_id} {
 	append where_clause "and material_uom_id = :restrict_to_uom_id\n"
