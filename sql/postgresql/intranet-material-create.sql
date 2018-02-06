@@ -305,7 +305,18 @@ SELECT im_category_new(9010, 'Web Site Dev.', 'Intranet Material Type');
 SELECT im_category_new(9012, 'Generic PM', 'Intranet Material Type');
 SELECT im_category_new(9014, 'Translation', 'Intranet Material Type');
 
+SELECT im_category_new(9020, 'Customer Material', 'Intranet Material Type');
+SELECT im_category_new(9022, 'Provider Material', 'Intranet Material Type');
 -- reserved until 9099
+
+SELECT im_category_hierarchy_new(9000,9020);
+SELECT im_category_hierarchy_new(9002,9020);
+SELECT im_category_hierarchy_new(9004,9020);
+SELECT im_category_hierarchy_new(9006,9020);
+SELECT im_category_hierarchy_new(9008,9020);
+SELECT im_category_hierarchy_new(9010,9020);
+SELECT im_category_hierarchy_new(9012,9020);
+SELECT im_category_hierarchy_new(9014,9020);
 
 
 

@@ -26,6 +26,12 @@ ad_proc -public im_material_type_web_site_dev { } { return 9010 }
 ad_proc -public im_material_type_generic_pm { } { return 9012 }
 ad_proc -public im_material_type_translation { } { return 9014 }
 
+
+ad_proc -public im_material_type_customer { } { return 9020 }
+ad_proc -public im_material_type_provider { } { return 9022 }
+
+
+
 # reserved until 9099
 
 
@@ -130,13 +136,13 @@ ad_proc -private im_material_options {
 } {
 
     set where_clause ""
-    if {0 != $restrict_to_status_id} {
+    if {"" ne $restrict_to_status_id && 0 ne $restrict_to_status_id} {
 	append where_clause "and material_status_id = :restrict_to_status_id\n"
     }
-    if {0 != $restrict_to_type_id} {
+    if {"" ne $restrict_to_type_id && 0 ne $restrict_to_type_id} {
 	append where_clause "and material_type_id = :restrict_to_type_id\n"
     }
-    if {0 != $restrict_to_uom_id} {
+    if {"" ne $restrict_to_uom_id && 0 ne $restrict_to_uom_id} {
 	append where_clause "and material_uom_id = :restrict_to_uom_id\n"
     }
 
@@ -359,15 +365,15 @@ ad_proc -public im_material_list_component {
 	
 	
     set restrictions [list]
-    if {0 != $restrict_to_status_id} {
+    if {0 ne $restrict_to_status_id} {
 	lappend restrictions "m.material_status_id in ([join [im_sub_categories $restrict_to_status_id] ","])"
     }
-    if {0 != $restrict_to_type_id} {
+    if {0 ne $restrict_to_type_id} {
 	lappend restrictions "m.material_type_id in ([join [im_sub_categories $restrict_to_type_id] ","])"
     }
 
     set restriction_clause [join $restrictions "\n\tand "]
-    if {"" != $restriction_clause} { 
+    if {"" ne $restriction_clause} { 
 	set restriction_clause "and $restriction_clause" 
     }
     set restriction_clause "1=1 $restriction_clause"
@@ -407,7 +413,7 @@ ad_proc -public im_material_list_component {
 	
 	# insert intermediate headers for every material type
 	if {"Type" eq $order_by} {
-	    if {$old_material_type_id != $material_type_id} {
+	    if {$old_material_type_id ne $material_type_id} {
 		append table_body_html "
     		    <tr><td colspan=$colspan>&nbsp;</td></tr>
     		    <tr><td class=rowtitle colspan=$colspan>
@@ -558,9 +564,9 @@ ad_proc -private im_material_create_from_parameters {
 
 	    # Append the key=value pair, unless the value is NULL
 	    eval "set val $$attribute_name"
-	    if {"" != $val} {
+	    if {"" ne $val} {
 		set param_deref [db_string deref "select ${deref_plpgsql_function}(:${attribute_name}::$sql_datatype)" -default ""]
-		if {"" != $material_name} { append material_name ", " }
+		if {"" ne $material_name} { append material_name ", " }
 		append material_name $param_deref
 	    }
 	}
