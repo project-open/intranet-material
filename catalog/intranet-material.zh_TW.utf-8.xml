@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<message_catalog package_key="intranet-material" locale="zh_TW" charset="utf-8">
+
+  <msg key="Filter_Materials">篩選材料</msg>
+  <msg key="Materials">物料 Materials</msg>
+  <msg key="Status">狀態</msg>
+  <msg key="Type">類型</msg>
+  <msg key="UoM">單位</msg>
+</message_catalog>
