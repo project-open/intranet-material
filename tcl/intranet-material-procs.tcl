@@ -274,24 +274,12 @@ ad_proc -public im_material_list_component {
     ns_log Notice "im_material_component: column_headers=$column_headers"
 
     # -------- Compile the list of parameters to pass-through-------
-
-    set form_vars [ns_conn form]
-    if {"" == $form_vars} { set form_vars [ns_set create] }
-
     set bind_vars [ns_set create]
     foreach var $export_var_list {
-	upvar 1 $var value
-	if { [info exists value] } {
+	set value [im_opt_val -limit_to nohtml $var]
+	if {$value ne ""} {
 	    ns_set put $bind_vars $var $value
 	    ns_log Notice "im_material_component: $var <- $value"
-	} else {
-	
-	    set value [ns_set get $form_vars $var]
-	    if {$value ne ""} {
- 		ns_set put $bind_vars $var $value
- 		ns_log Notice "im_material_component: $var <- $value"
-	    }
-	    
 	}
     }
 
