@@ -105,7 +105,7 @@ ad_form \
 
 im_dynfield::append_attributes_to_form \
     -object_type "im_material" \
-    -object_subtype_id [im_opt_val material_type_id] \
+    -object_subtype_id [im_opt_val -limit_to integer material_type_id] \
     -form_id "material" \
     -form_display_mode $form_mode
 
